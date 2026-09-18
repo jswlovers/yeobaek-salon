@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="여백 미장원 예약 및 고객 관리" />
+  <title>여백 미장원</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d211e'/%3E%3Cpath d='M18 20h28M22 32h20M26 44h12' stroke='%23eadfcf' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" data-go="home" aria-label="여백 홈"><span class="brand-mark">餘</span><span><b>여백</b><small>HAIR SALON</small></span></button>
+    <nav class="nav" aria-label="주 메뉴">
+      <button data-go="home">홈</button><button data-go="booking">예약</button><button data-go="reviews">후기</button><button data-go="admin">관리자</button>
+    </nav>
+    <button class="outline-btn mobile-book" data-go="booking">예약하기</button>
+  </header>
+
+  <main>
+    <section class="page active" id="home">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">SEONGNAM · PRIVATE HAIR SALON</p>
+          <h1>당신의 일상에<br><em>아름다운 여백</em>을.</h1>
+          <p class="hero-desc">한 사람을 위한 충분한 시간, 섬세한 상담과 편안한 스타일링을 약속합니다.</p>
+          <div class="hero-actions"><button class="primary-btn" data-go="booking">지금 예약하기 <span>→</span></button><button class="text-btn" data-go="reviews">고객 후기 보기</button></div>
+          <div class="quick-info"><div><span>오늘</span><strong id="todayStatus">예약 가능</strong></div><div><span>운영 시간</span><strong>10:00 — 20:00</strong></div><div><span>문의</span><strong>031-123-4567</strong></div></div>
+        </div>
+        <div class="hero-visual" aria-label="여백 미장원 인테리어 분위기"><div class="arch"><span>YEOBAEK</span></div><div class="floating-card"><small>NEXT AVAILABLE</small><strong id="nextSlot">오늘 14:30</strong><button data-go="booking">예약 →</button></div></div>
+      </div>
+      <div class="services-strip"><span>01 · CUT</span><span>02 · COLOR</span><span>03 · PERM</span><span>04 · CARE</span></div>
+    </section>
+
+    <section class="page content-page" id="booking">
+      <div class="page-heading"><p class="eyebrow">RESERVATION</p><h2>예약하기</h2><p>날짜를 선택하면 30분 단위 예약 현황을 확인할 수 있습니다.</p></div>
+      <div class="calendar-booking">
+        <section class="panel calendar-panel"><div class="step-title"><span>01</span><h3>날짜 선택</h3></div><div class="calendar-head"><button id="prevMonth" aria-label="이전 달">←</button><strong id="calendarTitle"></strong><button id="nextMonth" aria-label="다음 달">→</button></div><div class="weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div id="calendarGrid" class="calendar-grid"></div></section>
+        <section class="panel slots-panel"><div class="step-title"><span>02</span><h3>시간 선택</h3></div><div class="slot-legend"><span><i class="available"></i>예약 가능</span><span><i class="booked"></i>예약 완료</span></div><p id="slotDateLabel" class="selected-date"></p><div id="timeSlots" class="time-slots"></div></section>
+      </div>
+      <div class="booking-layout booking-details">
+        <form id="bookingForm" class="panel form-panel">
+          <input required name="date" type="hidden" /><input required name="time" type="hidden" />
+          <div class="step-title"><span>03</span><h3>예약자 및 결제 정보</h3></div>
+          <div class="field-grid"><label>이름<input required name="name" placeholder="성함을 입력해주세요" /></label><label>연락처<input required name="phone" inputmode="tel" placeholder="010-0000-0000" /><small id="coinLookup" class="coin-lookup">연락처를 입력하면 보유 코인을 확인합니다.</small></label></div>
+          <label>시술 메뉴<select required name="service" id="serviceSelect"><option value="">메뉴 선택</option><option data-price="35000">여성 커트 · 35,000원</option><option data-price="25000">남성 커트 · 25,000원</option><option data-price="120000">프리미엄 염색 · 120,000원</option><option data-price="150000">디자인 펌 · 150,000원</option><option data-price="80000">클리닉 케어 · 80,000원</option></select></label>
+          <label>담당 디자이너<select name="designer"><option>지정 없음</option><option>서윤 원장</option><option>하린 디자이너</option><option>도윤 디자이너</option></select></label>
+          <div class="coin-payment"><label class="check-label"><input id="useCoin" type="checkbox" /> 코인으로 결제하기</label><div id="coinPaymentFields" class="coin-payment-fields"><label>사용할 코인<input id="bookingCoinAmount" type="number" min="1" placeholder="사용할 코인" /></label><button type="button" class="outline-btn" id="useMaxCoin">최대 사용</button></div><p id="paymentSummary">시술 메뉴를 선택해주세요.</p></div>
+          <label>요청 사항<textarea name="memo" rows="3" placeholder="원하는 스타일이나 참고 사항을 남겨주세요"></textarea></label>
+          <button class="primary-btn full" type="submit">예약 및 결제 신청</button>
+        </form>
+        <aside class="booking-aside"><div class="aside-art"><div class="scissors">✦</div><p>좋은 스타일은<br>좋은 대화에서 시작됩니다.</p></div><div class="notice"><h3>예약 안내</h3><ul><li>예약 변경은 하루 전까지 부탁드립니다.</li><li>시술 시간은 모발 상태에 따라 달라질 수 있습니다.</li><li>예약 확정은 문자로 안내드립니다.</li></ul></div></aside>
+      </div>
+    </section>
+
+    <section class="page content-page" id="reviews">
+      <div class="page-heading split"><div><p class="eyebrow">OUR REVIEWS</p><h2>여백을 다녀간 이야기</h2></div><button class="primary-btn" id="openReview">후기 작성</button></div>
+      <div class="review-summary panel"><div><strong id="avgRating">4.9</strong><span class="stars">★★★★★</span><small><b id="reviewCount">3</b>개의 소중한 후기</small></div><div class="rating-bars"><p><span>5점</span><i><b style="width:92%"></b></i><small>92%</small></p><p><span>4점</span><i><b style="width:8%"></b></i><small>8%</small></p></div></div>
+      <div id="reviewList" class="review-grid"></div>
+    </section>
+
+    <section class="page admin-page" id="admin">
+      <aside class="admin-sidebar"><div class="admin-brand"><span class="brand-mark">餘</span><b>여백 관리자</b></div><nav><button class="active" data-admin="dashboard">▦ 대시보드</button><button data-admin="reservations">◷ 예약 관리</button><button data-admin="customers">♙ 고객 관리</button><button data-admin="coins">◇ 코인 관리</button><button data-admin="reviewAdmin">☆ 후기 관리</button></nav><button class="back-site" data-go="home">← 고객 화면으로</button></aside>
+      <div class="admin-main">
+        <div class="admin-top"><div><p id="adminDate"></p><h2 id="adminTitle">대시보드</h2></div><div class="admin-user"><span>서윤</span><i>원장</i><b>SY</b></div></div>
+        <div class="admin-view active" id="dashboard"><div class="stat-grid"><article><span>오늘 예약</span><strong id="statToday">4</strong><small>건</small><i>◷</i></article><article><span>전체 고객</span><strong id="statCustomers">4</strong><small>명</small><i>♙</i></article><article><span>발행 코인</span><strong id="statCoins">52,000</strong><small>C</small><i>◇</i></article><article><span>새 후기</span><strong id="statReviews">3</strong><small>개</small><i>☆</i></article></div><div class="dash-grid"><section class="admin-card"><div class="card-head"><h3>오늘의 예약</h3><button data-admin="reservations">전체 보기 →</button></div><div id="todayReservations"></div></section><section class="admin-card"><div class="card-head"><h3>최근 고객</h3><button data-admin="customers">고객 관리 →</button></div><div id="recentCustomers"></div></section></div></div>
+        <div class="admin-view" id="reservations"><section class="admin-card"><div class="card-head"><h3>전체 예약</h3><button class="small-primary" data-go="booking">+ 예약 등록</button></div><div class="table-wrap"><table><thead><tr><th>예약일</th><th>고객</th><th>시술</th><th>담당</th><th>상태</th><th></th></tr></thead><tbody id="reservationTable"></tbody></table></div></section></div>
+        <div class="admin-view" id="customers"><section class="admin-card"><div class="card-head"><h3>고객 목록</h3><input id="customerSearch" class="search" placeholder="이름 또는 연락처 검색" /></div><div class="table-wrap"><table><thead><tr><th>고객명</th><th>연락처</th><th>최근 방문</th><th>방문</th><th>보유 코인</th></tr></thead><tbody id="customerTable"></tbody></table></div></section></div>
+        <div class="admin-view" id="coins"><section class="coin-control admin-card"><div><p class="eyebrow">YEOBAEK COIN</p><h3>고객 코인 관리</h3><p>지급·사용 처리하거나 고객의 현재 잔액을 직접 조정합니다.</p><div id="selectedCoinBalance" class="big-balance">0 C</div></div><form id="coinForm"><label>고객<select id="coinCustomer" required></select></label><label>코인 수량<input id="coinAmount" type="number" min="0" required placeholder="코인 수량" /></label><div class="coin-buttons three"><button class="primary-btn" value="add" type="submit">지급</button><button class="outline-btn" value="use" type="submit">사용</button><button class="outline-btn" value="set" type="submit">잔액 조정</button></div><p id="adminCoinResult" class="coin-result"></p></form></section><section class="admin-card"><div class="card-head"><h3>고객별 코인 잔액</h3></div><div id="coinBalances" class="coin-balances"></div></section><section class="admin-card coin-history-card"><div class="card-head"><h3>최근 코인 내역</h3></div><div id="coinHistory" class="history-list"></div></section></div>
+        <div class="admin-view" id="reviewAdmin"><section class="admin-card"><div class="card-head"><h3>후기 관리</h3><span class="muted">게시된 후기를 숨기거나 삭제할 수 있습니다.</span></div><div id="reviewAdminList" class="admin-review-list"></div></section></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="reviewModal" aria-hidden="true"><form id="reviewForm" class="modal-box"><button type="button" class="modal-close" id="closeReview">×</button><p class="eyebrow">WRITE A REVIEW</p><h2>후기 작성</h2><label>이름<input name="name" required placeholder="성함" /></label><label>별점<select name="rating"><option value="5">★★★★★ · 5점</option><option value="4">★★★★☆ · 4점</option><option value="3">★★★☆☆ · 3점</option></select></label><label>시술 메뉴<input name="service" required placeholder="예: 디자인 펌" /></label><label>후기<textarea name="text" rows="5" required placeholder="여백에서의 경험을 들려주세요."></textarea></label><button class="primary-btn full">후기 등록하기</button></form></div>
+  <div class="modal" id="bookingSuccess" aria-hidden="true"><div class="modal-box success-box"><span class="success-icon">✓</span><p class="eyebrow">RESERVATION COMPLETE</p><h2>예약이 접수되었습니다</h2><p id="bookingSuccessText"></p><button class="primary-btn full" id="closeBookingSuccess">확인</button></div></div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
