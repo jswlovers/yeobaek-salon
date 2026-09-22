@@ -43,8 +43,20 @@
           <input required name="date" type="hidden" /><input required name="time" type="hidden" />
           <div class="step-title"><span>03</span><h3>예약자 및 결제 정보</h3></div>
           <div class="field-grid"><label>이름<input required name="name" placeholder="성함을 입력해주세요" /></label><label>연락처<input required name="phone" inputmode="tel" placeholder="010-0000-0000" /><small id="coinLookup" class="coin-lookup">연락처를 입력하면 보유 코인을 확인합니다.</small></label></div>
-          <label>시술 메뉴<select required name="service" id="serviceSelect"><option value="">메뉴 선택</option><option data-price="35000">여성 커트 · 35,000원</option><option data-price="25000">남성 커트 · 25,000원</option><option data-price="120000">프리미엄 염색 · 120,000원</option><option data-price="150000">디자인 펌 · 150,000원</option><option data-price="80000">클리닉 케어 · 80,000원</option></select></label>
-          <label>담당 디자이너<select name="designer"><option>지정 없음</option><option>서윤 원장</option><option>하린 디자이너</option><option>도윤 디자이너</option></select></label>
+          <label>담당 디자이너<select name="designer" id="designerSelect"><option>지정 없음</option><option value="서윤 원장" data-role="director">원장</option><option data-role="manager">하린실장</option><option>도윤 디자이너</option></select></label>
+          <label>시술 메뉴<select required name="service" id="serviceSelect">
+            <option value="">메뉴 선택</option>
+            <optgroup label="커트" id="directorCuts">
+              <option data-price="25000">원장남성커트 · 25,000원</option>
+              <option data-price="35000">원장여성커트 · 35,000원</option>
+              <option>원장학생커트 · 가격 문의</option>
+              <option>원장커트다운펌 · 가격 문의</option>
+              <option>원장전체다운펌커트 · 가격 문의</option>
+            </optgroup>
+            <optgroup label="염색"><option data-price="120000">프리미엄 염색 · 120,000원</option></optgroup>
+            <optgroup label="펌"><option data-price="150000">디자인 펌 · 150,000원</option></optgroup>
+            <optgroup label="케어"><option data-price="80000">클리닉 케어 · 80,000원</option></optgroup>
+          </select></label>
           <div class="coin-payment"><label class="check-label"><input id="useCoin" type="checkbox" /> 코인으로 결제하기</label><div id="coinPaymentFields" class="coin-payment-fields"><label>사용할 코인<input id="bookingCoinAmount" type="number" min="1" placeholder="사용할 코인" /></label><button type="button" class="outline-btn" id="useMaxCoin">최대 사용</button></div><p id="paymentSummary">시술 메뉴를 선택해주세요.</p></div>
           <label>요청 사항<textarea name="memo" rows="3" placeholder="원하는 스타일이나 참고 사항을 남겨주세요"></textarea></label>
           <button class="primary-btn full" type="submit">예약 및 결제 신청</button>
