@@ -46,8 +46,26 @@
           <label>시술 메뉴<select required name="service" id="serviceSelect"><option value="">메뉴 선택</option><option data-price="35000">여성 커트 · 35,000원</option><option data-price="25000">남성 커트 · 25,000원</option><option data-price="120000">프리미엄 염색 · 120,000원</option><option data-price="150000">디자인 펌 · 150,000원</option><option data-price="80000">클리닉 케어 · 80,000원</option></select></label>
           <label>담당 디자이너<select name="designer"><option>지정 없음</option><option>서윤 원장</option><option>하린 디자이너</option><option>도윤 디자이너</option></select></label>
           <div class="coin-payment"><label class="check-label"><input id="useCoin" type="checkbox" /> 코인으로 결제하기</label><div id="coinPaymentFields" class="coin-payment-fields"><label>사용할 코인<input id="bookingCoinAmount" type="number" min="1" placeholder="사용할 코인" /></label><button type="button" class="outline-btn" id="useMaxCoin">최대 사용</button></div><p id="paymentSummary">시술 메뉴를 선택해주세요.</p></div>
-          <label>요청 사항<textarea name="memo" rows="3" placeholder="원하는 스타일이나 참고 사항을 남겨주세요"></textarea></label>
-          <button class="primary-btn full" type="submit">예약 및 결제 신청</button>
+          <label>요청 사항<textarea name="memo" rows="3" placeholder="원하는 스타일이나 참고 사항을 남겨주세요"></textarea><small class="field-hint">두피 질환, 임신 여부 등 건강 정보는 적지 말고 방문 시 말씀해 주세요.</small></label>
+          <fieldset class="consent" id="bookingConsent">
+            <legend>약관 및 개인정보 동의</legend>
+            <label class="check-label"><input type="checkbox" data-consent="age14" /> <span><b>(필수)</b> 예약자는 만 14세 이상입니다</span></label>
+            <p class="consent-note">만 14세 미만은 보호자 명의로 예약해 주세요.</p>
+            <label class="check-label"><input type="checkbox" data-consent="terms" /> <span><b>(필수)</b> 이용약관과 예약 취소 규정에 동의합니다</span></label>
+            <p class="consent-note"><a href="./terms.html" target="_blank" rel="noopener">이용약관 전문 보기</a> · <a href="./policy.html" target="_blank" rel="noopener">예약 취소 규정(운영정책) 보기</a></p>
+            <label class="check-label"><input type="checkbox" data-consent="privacy" /> <span><b>(필수)</b> 개인정보 수집·이용에 동의합니다</span></label>
+            <details class="consent-detail"><summary>수집·이용 내용 보기</summary>
+              <div class="table-wrap"><table><thead><tr><th>수집 항목</th><th>이용 목적</th><th>보유 기간</th></tr></thead><tbody>
+                <tr><td>이름, 연락처</td><td>예약 확인, 예약 안내 알림, 코인 적립·사용</td><td>최근 방문일로부터 3년</td></tr>
+                <tr><td>예약 일시, 시술 메뉴, 담당 디자이너, 요청 사항</td><td>예약 처리</td><td>최근 방문일로부터 3년</td></tr>
+                <tr><td>동의 일시, 접속 IP, 브라우저 정보</td><td>동의 사실 증명</td><td>3년</td></tr>
+              </tbody></table></div>
+              <p><b>동의를 거부할 권리가 있습니다.</b> 다만 동의하지 않으시면 온라인 예약이 제한되며, 전화(031-123-4567)로 예약하실 수 있습니다.</p>
+              <p>예약 안내 알림 발송을 위해 솔라피·카카오에, 예약 일정 관리를 위해 네이버에 처리를 위탁합니다. <a href="./privacy.html" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a></p>
+            </details>
+          </fieldset>
+          <button class="primary-btn full" type="submit" id="bookingSubmit" disabled>예약 및 결제 신청</button>
+          <p class="consent-hint" id="consentHint">필수 항목에 동의해 주세요.</p>
         </form>
         <aside class="booking-aside"><div class="aside-art"><div class="scissors">✦</div><p>좋은 스타일은<br>좋은 대화에서 시작됩니다.</p></div><div class="notice"><h3>예약 안내</h3><ul><li>예약 변경은 하루 전까지 부탁드립니다.</li><li>시술 시간은 모발 상태에 따라 달라질 수 있습니다.</li><li>예약 확정은 문자로 안내드립니다.</li></ul></div></aside>
       </div>
@@ -60,11 +78,27 @@
     </section>
 
     <section class="page admin-page" id="admin">
-      <aside class="admin-sidebar"><div class="admin-brand"><span class="brand-mark">餘</span><b>여백 관리자</b></div><nav><button class="active" data-admin="dashboard">▦ 대시보드</button><button data-admin="reservations">◷ 예약 관리</button><button data-admin="customers">♙ 고객 관리</button><button data-admin="coins">◇ 코인 관리</button><button data-admin="reviewAdmin">☆ 후기 관리</button></nav><button class="back-site" data-go="home">← 고객 화면으로</button></aside>
+      <div class="admin-login" id="adminLogin">
+        <form id="adminLoginForm" class="admin-login-box">
+          <span class="brand-mark">餘</span>
+          <h2>관리자 로그인</h2>
+          <p class="muted">관리자 비밀번호를 입력하세요.</p>
+          <input type="password" id="adminLoginInput" placeholder="비밀번호" autocomplete="current-password" required />
+          <button class="primary-btn full" type="submit">로그인</button>
+          <p id="adminLoginError" class="admin-login-error"></p>
+        </form>
+      </div>
+      <aside class="admin-sidebar"><div class="admin-brand"><span class="brand-mark">餘</span><b>여백 관리자</b></div><nav><button class="active" data-admin="dashboard">▦ 대시보드</button><button data-admin="reservations">◷ 예약 관리</button><button data-admin="customers">♙ 고객 관리</button><button data-admin="coins">◇ 코인 관리</button><button data-admin="reviewAdmin">☆ 후기 관리</button></nav><button class="back-site" id="adminLogout">↪ 로그아웃</button><button class="back-site" data-go="home">← 고객 화면으로</button></aside>
       <div class="admin-main">
-        <div class="admin-top"><div><p id="adminDate"></p><h2 id="adminTitle">대시보드</h2></div><div class="admin-user"><span>서윤</span><i>원장</i><b>SY</b></div></div>
+        <div class="admin-top"><div><p id="adminDate"></p><h2 id="adminTitle">대시보드</h2></div><div class="admin-user"><button class="action-btn" id="connectNaver">네이버 캘린더 연동</button><button class="action-btn" id="disconnectNaver">연동 해제</button><span>서윤</span><i>원장</i><b>SY</b></div></div>
         <div class="admin-view active" id="dashboard"><div class="stat-grid"><article><span>오늘 예약</span><strong id="statToday">4</strong><small>건</small><i>◷</i></article><article><span>전체 고객</span><strong id="statCustomers">4</strong><small>명</small><i>♙</i></article><article><span>발행 코인</span><strong id="statCoins">52,000</strong><small>C</small><i>◇</i></article><article><span>새 후기</span><strong id="statReviews">3</strong><small>개</small><i>☆</i></article></div><div class="dash-grid"><section class="admin-card"><div class="card-head"><h3>오늘의 예약</h3><button data-admin="reservations">전체 보기 →</button></div><div id="todayReservations"></div></section><section class="admin-card"><div class="card-head"><h3>최근 고객</h3><button data-admin="customers">고객 관리 →</button></div><div id="recentCustomers"></div></section></div></div>
-        <div class="admin-view" id="reservations"><section class="admin-card"><div class="card-head"><h3>전체 예약</h3><button class="small-primary" data-go="booking">+ 예약 등록</button></div><div class="table-wrap"><table><thead><tr><th>예약일</th><th>고객</th><th>시술</th><th>담당</th><th>상태</th><th></th></tr></thead><tbody id="reservationTable"></tbody></table></div></section></div>
+        <div class="admin-view" id="reservations"><section class="admin-card reservation-calendar-panel" aria-label="매장 예약 캘린더">
+          <div class="card-head"><div><h3>예약 캘린더</h3><p class="muted">날짜를 선택하면 해당 날짜의 예약을 확인할 수 있습니다.</p></div><button class="small-primary" data-go="booking">+ 예약 등록</button></div>
+          <div class="reservation-calendar-toolbar"><h4 id="adminCalendarTitle" aria-live="polite"></h4><div><button type="button" id="adminPrevMonth" aria-label="예약 캘린더 이전 달">←</button><button type="button" id="adminCalendarToday">오늘</button><button type="button" id="adminNextMonth" aria-label="예약 캘린더 다음 달">→</button></div></div>
+          <p id="adminMonthSummary" class="muted"></p>
+          <div class="reservation-calendar-scroll"><div class="reservation-calendar-month"><div class="weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div id="adminCalendarGrid" class="reservation-calendar-grid"></div></div></div>
+          <section class="reservation-day-detail" aria-labelledby="adminSelectedDate"><div class="card-head"><h3 id="adminSelectedDate"></h3><span id="adminDayCount" class="badge"></span></div><div id="adminDayReservations" aria-live="polite"></div></section>
+        </section><section class="admin-card"><div class="card-head"><h3>전체 예약</h3><button class="small-primary" data-go="booking">+ 예약 등록</button></div><div class="table-wrap"><table><thead><tr><th>예약일</th><th>고객</th><th>시술</th><th>담당</th><th>상태</th><th></th></tr></thead><tbody id="reservationTable"></tbody></table></div></section></div>
         <div class="admin-view" id="customers"><section class="admin-card"><div class="card-head"><h3>고객 목록</h3><input id="customerSearch" class="search" placeholder="이름 또는 연락처 검색" /></div><div class="table-wrap"><table><thead><tr><th>고객명</th><th>연락처</th><th>최근 방문</th><th>방문</th><th>보유 코인</th></tr></thead><tbody id="customerTable"></tbody></table></div></section></div>
         <div class="admin-view" id="coins"><section class="coin-control admin-card"><div><p class="eyebrow">YEOBAEK COIN</p><h3>고객 코인 관리</h3><p>지급·사용 처리하거나 고객의 현재 잔액을 직접 조정합니다.</p><div id="selectedCoinBalance" class="big-balance">0 C</div></div><form id="coinForm"><label>고객<select id="coinCustomer" required></select></label><label>코인 수량<input id="coinAmount" type="number" min="0" required placeholder="코인 수량" /></label><div class="coin-buttons three"><button class="primary-btn" value="add" type="submit">지급</button><button class="outline-btn" value="use" type="submit">사용</button><button class="outline-btn" value="set" type="submit">잔액 조정</button></div><p id="adminCoinResult" class="coin-result"></p></form></section><section class="admin-card"><div class="card-head"><h3>고객별 코인 잔액</h3></div><div id="coinBalances" class="coin-balances"></div></section><section class="admin-card coin-history-card"><div class="card-head"><h3>최근 코인 내역</h3></div><div id="coinHistory" class="history-list"></div></section></div>
         <div class="admin-view" id="reviewAdmin"><section class="admin-card"><div class="card-head"><h3>후기 관리</h3><span class="muted">게시된 후기를 숨기거나 삭제할 수 있습니다.</span></div><div id="reviewAdminList" class="admin-review-list"></div></section></div>
@@ -72,7 +106,13 @@
     </section>
   </main>
 
-  <div class="modal" id="reviewModal" aria-hidden="true"><form id="reviewForm" class="modal-box"><button type="button" class="modal-close" id="closeReview">×</button><p class="eyebrow">WRITE A REVIEW</p><h2>후기 작성</h2><label>이름<input name="name" required placeholder="성함" /></label><label>별점<select name="rating"><option value="5">★★★★★ · 5점</option><option value="4">★★★★☆ · 4점</option><option value="3">★★★☆☆ · 3점</option></select></label><label>시술 메뉴<input name="service" required placeholder="예: 디자인 펌" /></label><label>후기<textarea name="text" rows="5" required placeholder="여백에서의 경험을 들려주세요."></textarea></label><button class="primary-btn full">후기 등록하기</button></form></div>
+  <footer class="site-footer">
+    <nav class="footer-links" aria-label="약관 및 정책"><a href="./terms.html">이용약관</a><a href="./privacy.html"><b>개인정보처리방침</b></a><a href="./policy.html">운영정책</a></nav>
+    <p>상호 [미정] · 대표자 [미정] · 주소 [미정] · 사업자등록번호 [미정]</p>
+    <p>문의 031-123-4567 · 전자우편 [미정]</p>
+  </footer>
+
+  <div class="modal" id="reviewModal" aria-hidden="true"><form id="reviewForm" class="modal-box"><button type="button" class="modal-close" id="closeReview">×</button><p class="eyebrow">WRITE A REVIEW</p><h2>후기 작성</h2><label>이름<input name="name" required placeholder="성함" /></label><label>별점<select name="rating"><option value="5">★★★★★ · 5점</option><option value="4">★★★★☆ · 4점</option><option value="3">★★★☆☆ · 3점</option></select></label><label>시술 메뉴<input name="service" required placeholder="예: 디자인 펌" /></label><label>후기<textarea name="text" rows="5" required placeholder="여백에서의 경험을 들려주세요."></textarea><small class="field-hint">후기는 누구나 볼 수 있으며 이름은 첫 글자만 공개됩니다. 다른 사람의 이름이나 연락처 등 개인정보는 적지 마세요. <a href="./policy.html" target="_blank" rel="noopener">후기 운영 기준</a></small></label><button class="primary-btn full">후기 등록하기</button></form></div>
   <div class="modal" id="bookingSuccess" aria-hidden="true"><div class="modal-box success-box"><span class="success-icon">✓</span><p class="eyebrow">RESERVATION COMPLETE</p><h2>예약이 접수되었습니다</h2><p id="bookingSuccessText"></p><button class="primary-btn full" id="closeBookingSuccess">확인</button></div></div>
   <div id="toast" class="toast" role="status"></div>
   <script src="./app.js"></script>

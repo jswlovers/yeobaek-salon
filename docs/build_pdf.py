@@ -24,13 +24,15 @@ S = {
     'p': ParagraphStyle('p', base, spaceAfter=5),
     'cell': ParagraphStyle('cell', base, fontSize=8.5, leading=12),
     'cellh': ParagraphStyle('cellh', base, fontName='KB', fontSize=8.5, leading=12),
+    'sub': ParagraphStyle('sub', base, leftIndent=30, spaceAfter=3),
+    'quote': ParagraphStyle('quote', base, leftIndent=12, textColor=colors.HexColor('#4a4f4b'), backColor=colors.HexColor('#f5f1e9'), borderPadding=5, spaceBefore=2, spaceAfter=8),
     'code': ParagraphStyle('code', base, fontSize=8, leading=11, backColor=colors.HexColor('#f3efe8'), borderPadding=5, spaceAfter=8),
 }
 
 
 def inline(t):
     t = escape(t)
-    t = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<link href="\2" color="#2a5db0">\1</link>', t)
+    t = re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)', r'<link href="\2" color="#2a5db0">\1</link>', t)
     t = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', t)
     t = re.sub(r'`(.+?)`', r'<font color="#8a4b1f">\1</font>', t)
     return t
@@ -73,13 +75,20 @@ def convert(src: Path):
             n = len(ln) - len(ln.lstrip('#'))
             story.append(Paragraph(inline(ln[n + 1:]), S[f'h{n}']))
             i += 1
+        elif re.match(r'^\s+[a-z]\. ', ln):
+            story.append(Paragraph(inline(ln.strip()), S['sub']))
+            i += 1
+        elif ln.startswith('> '):
+            story.append(Paragraph(inline(ln[2:]), S['quote']))
+            i += 1
         elif re.match(r'^\s*(-|\d+\.) ', ln):
             ordered = ln.lstrip()[0].isdigit()
+            first = int(re.match(r'^\s*(\d*)', ln).group(1) or 1)
             items = []
             while i < len(lines) and re.match(r'^\s*(-|\d+\.) ', lines[i]):
                 items.append(ListItem(Paragraph(inline(re.sub(r'^\s*(-|\d+\.) ', '', lines[i])), S['p']), leftIndent=14))
                 i += 1
-            story.append(ListFlowable(items, bulletType='1' if ordered else 'bullet', start=None if not ordered else 1,
+            story.append(ListFlowable(items, bulletType='1' if ordered else 'bullet', start=None if not ordered else first,
                                       bulletFontName='K', bulletFontSize=9, leftIndent=14))
             story.append(Spacer(1, 4))
         elif not ln.strip():
@@ -87,7 +96,7 @@ def convert(src: Path):
         else:
             para = [ln]
             i += 1
-            while i < len(lines) and lines[i].strip() and not re.match(r'^(#|```|\||\s*(-|\d+\.) )', lines[i]):
+            while i < len(lines) and lines[i].strip() and not re.match(r'^(#|```|\||>|\s*(-|\d+\.) |\s+[a-z]\. )', lines[i]):
                 para.append(lines[i]); i += 1
             story.append(Paragraph(inline(' '.join(para)), S['p']))
 
@@ -103,5 +112,6 @@ def convert(src: Path):
     print(out)
 
 
-for f in ('user-manual.md', 'admin-manual.md'):
+for f in ('user-manual.md', 'admin-manual.md', 'feature-design.md',
+          'terms-of-service.md', 'privacy-policy.md', 'operation-policy.md', 'booking-screen-spec.md'):
     convert(Path(__file__).parent / f)
